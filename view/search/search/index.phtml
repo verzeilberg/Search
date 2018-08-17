@@ -1,0 +1,41 @@
+<?php
+$this->mainMenu()->setActiveItemId('search');
+$this->pageBreadcrumbs()->setItems([
+    'Beheer' => $this->url('beheer'),
+    'Search' => $this->url('beheer/search'),
+]);
+?>
+<hgroup id="headAdminTitle" class="col-sm-12 col-md-12 col-lg-12">
+    <h1 id="index">SEARCH BEHEER</h1>
+</hgroup>
+<!-- Breadcrumbs -->
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <?= $this->pageBreadcrumbs()->render(); ?>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <table class="table table-striped table-hover table-bordered">
+        <tr>
+            <th>Zoekwoord</th>
+            <th>Laatst gezocht op</th>
+            <th>Aantal keer gezocht</th>
+            <th><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> </th>
+        </tr>
+        <?php if (count($searchPhrases) > 0) { ?>
+        <?php foreach ($searchPhrases AS $searchPhrase) { ?>
+            <tr>
+                <td><?php echo $searchPhrase->getSearchPhrase(); ?></td>
+                <td><?php echo (is_object($searchPhrase->getDateSearched()) ? $searchPhrase->getDateSearched()->format('d-m-Y') : ''); ?></td>
+                <td><?php echo $searchPhrase->getCount(); ?></td>
+                <td>
+                    <a class="btn btn-danger" href="
+                       <?= $this->url('beheer/search', ['action' => 'delete', 'id' => $searchPhrase->getId()]); ?>">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Verwijder
+                    </a>
+                </td>
+            </tr>
+        <?php } ?>
+        <?php } else { ?>
+            <td colspan="4" class="text-center">Er is nog niet gezocht. Treurig niet?</td>
+        <?php } ?>
+    </table>
+</div>
