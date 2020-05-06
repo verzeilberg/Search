@@ -3,7 +3,7 @@ namespace Search\Controller\Factory;
 
 use Interop\Container\ContainerInterface;
 use Search\Controller\SearchController;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Search\Service\searchService;
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller

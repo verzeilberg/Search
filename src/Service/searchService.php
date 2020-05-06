@@ -2,7 +2,7 @@
 
 namespace Search\Service;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Search\Entity\Search;
 
 class searchService implements searchServiceInterface {
