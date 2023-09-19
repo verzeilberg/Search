@@ -32,7 +32,10 @@ class SearchController extends AbstractActionController {
      */
     public function indexAction() {
         $this->layout('layout/beheer');
-        $searchPhrases = $this->searchService->getSearchPhrases();
+        $page = $this->params()->fromQuery('page', 1);
+        $query = $this->searchService->getSearchPhrases();
+        $searchPhrases = $this->searchService->getItemsForPagination($query, $page, 10);
+
         return new ViewModel([
             'searchPhrases' => $searchPhrases
         ]);

@@ -2,10 +2,12 @@
 
 namespace Search\Service;
 
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Laminas\Paginator\Paginator;
 use Search\Entity\Search;
 
-class searchService implements searchServiceInterface {
+class searchService {
 
     protected $em;
 
@@ -130,30 +132,24 @@ class searchService implements searchServiceInterface {
      *
      */
     public function getSearchPhrases() {
-        $searchPhrases = $this->em->getRepository(Search::class)
-                ->findBy([], ['dateSearched' => 'DESC']);
-        if (!empty($searchPhrases)) {
-            return $searchPhrases;
-        } else {
-            return null;
-        }
+        $qb = $this->em->getRepository(Search::class)->createQueryBuilder('s')
+            ->orderBy('s.dateSearched', 'DESC');
+        return $qb->getQuery();
     }
 
     /**
-     *
-     * get search phrases
-     *
-     * @return      array
-     *
+     * @param $query
+     * @param int $currentPage
+     * @param int $itemsPerPage
+     * @return Paginator
      */
-    public function getSearchPhrasesForPaginator() {
-        $searchPhrases = $this->em->getRepository('Search\Entity\Search')->createQueryBuilder('s');
-        $searchPhrases->select('s');
-        if (!empty($searchPhrases)) {
-            return $searchPhrases;
-        } else {
-            return null;
-        }
+    public function getItemsForPagination($query, int $currentPage = 1, int $itemsPerPage = 10)
+    {
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new Paginator($adapter);
+        $paginator->setDefaultItemCountPerPage($itemsPerPage);
+        $paginator->setCurrentPageNumber($currentPage);
+        return $paginator;
     }
 
     /**
